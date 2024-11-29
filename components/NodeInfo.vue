@@ -275,18 +275,20 @@ nextTick(() => {
   let ipv4 = ''; // 初始为空
   let ipv6 = ''; // 初始为空
 
-  // 判断是否为私有 IP 地址
-  const isPrivateIP = (ip) => {
-    const parts = ip.split('.');
-    if (ip === '0.0.0.0' || ip === '127.0.0.1') return true;  // 过滤掉 0.0.0.0 和 127.0.0.1
-    if (parts.length === 4) {
-      const firstOctet = parseInt(parts[0], 10);
-      return firstOctet === 10 || 
-             (firstOctet === 172 && parts[1] >= 16 && parts[1] <= 31) || 
-             (firstOctet === 192 && parts[1] === 168);
-    }
-    return ip.startsWith("fc") || ip.startsWith("fe80"); // 过滤 IPv6 的私有地址
-  };
+// 判断是否为私有 IP 地址
+const isPrivateIP = (ip) => {
+  const parts = ip.split('.');
+  if (ip === '0.0.0.0' || ip === '127.0.0.1') return true;  // 过滤掉 0.0.0.0 和 127.0.0.1
+  if (parts.length === 4) {
+    const firstOctet = parseInt(parts[0], 10);
+    const secondOctet = parseInt(parts[1], 10);
+    return firstOctet === 10 || 
+           (firstOctet === 172 && secondOctet >= 16 && secondOctet <= 31) || 
+           (firstOctet === 192 && secondOctet === 168);  // 修改了这里，确保 192.168.x.x 都被视为私有 IP
+  }
+  return ip.startsWith("fc") || ip.startsWith("fe80"); // 过滤 IPv6 的私有地址
+};
+
 
   // 将 IP 地址添加到集合中，并且只会添加第一次出现的非私有 IP 地址
   const addIP = (ip) => {
@@ -385,7 +387,7 @@ const getLocation = async (ip) => {
 
     } else {
       // 如果未获得 IP 地址，则继续尝试，每隔 1000ms（1秒）再次执行
-      setTimeout(tryGetIP, 1000);
+      setTimeout(tryGetIP, 100);
     }
   };
 
