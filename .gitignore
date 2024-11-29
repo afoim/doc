@@ -18,3 +18,4 @@ tmp/
 
 # 忽略vitepress的缓存文件
 .vitepress/cache
+.vitepress/.temp
