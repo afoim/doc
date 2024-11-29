@@ -27,7 +27,7 @@ export default defineConfig({
       {
         text: '文档',
         items: [
-          { text: '实用工具', link: '/doc/实用工具.md' }
+          { text: '实用工具', link: '/doc' }
         ]
       }
     ],

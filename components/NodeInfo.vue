@@ -69,7 +69,7 @@ const loadVisitorInfo = async () => {
     const ipv6 = ipv6Data.ip;
 
     // 获取地理位置信息
-    const locationResponse = await fetch(`http://ip-api.com/json/${ipv4}`);
+    const locationResponse = await fetch(`https://ip-api.com/json/${ipv4}`);
     const locationData = await locationResponse.json();
 
     // 将获取到的 IP 地址和地理位置信息写入容器
