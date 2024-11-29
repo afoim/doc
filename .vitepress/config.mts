@@ -17,7 +17,8 @@ export default defineConfig({
     lightModeSwitchTitle: '切换浅色模式',
     logo: 'https://q2.qlogo.cn/headimg_dl?dst_uin=2973517380&spec=5',
     nav: [
-      { text: '珍珠奶茶', link: '/' }
+      { text: '珍珠奶茶', link: '/' },
+      { text: '芋圆波波', link: 'https://status.onani.cn/' }
     ],
 
     footer: {
