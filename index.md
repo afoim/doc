@@ -29,5 +29,6 @@ hero:
 import NodeInfo from './components/NodeInfo.vue'; // 导入组件
 </script>
 
-
+<ClientOnly>
 <NodeInfo />
+</ClientOnly>
