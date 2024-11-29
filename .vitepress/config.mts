@@ -1,17 +1,13 @@
 import { defineConfig } from 'vitepress'
 
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "AcoFork Doc",
   lang: 'zh-CN',
-  head: [ ['link', { rel: 'icon', type: 'image/x-icon', href: 'https://q2.qlogo.cn/headimg_dl?dst_uin=2973517380&spec=5' }],
-  
-  
-  
-],
+  head: [
+    ['link', { rel: 'icon', type: 'image/x-icon', href: 'https://q2.qlogo.cn/headimg_dl?dst_uin=2973517380&spec=5' }]
+  ],
   description: "idk",
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
     sidebarMenuLabel: '菜单',
     outlineTitle: '页面导航',
     returnToTopLabel: '返回顶部',
@@ -23,12 +19,10 @@ export default defineConfig({
       { text: '珍珠奶茶', link: '/' },
       { text: '芋圆波波', link: 'https://status.onani.cn/' }
     ],
-
     footer: {
       message: '本网站内容遵循 MIT 协议。<FooterInfo />',
       copyright: `版权所有 © 你活着的时候 - ${new Date().getFullYear()} AcoFork`
     },
-
     sidebar: [
       {
         text: '文档',
@@ -37,9 +31,9 @@ export default defineConfig({
         ]
       }
     ],
-
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
     ]
-  }
+  },
+  
 })
