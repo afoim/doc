@@ -324,29 +324,31 @@ nextTick(() => {
     };
   };
 
-  // 使用美图API查询IP地址的地理位置
-  const getLocation = async (ip) => {
-    try {
-      const response = await fetch(`https://webapi-pc.meitu.com/common/ip_location?ip=${ip}`);
-      const data = await response.json();
+// 使用 Vore API 查询 IP 地址的地理位置
+const getLocation = async (ip) => {
+  try {
+    // 使用 Vore API 获取地理位置信息
+    const response = await fetch(`https://api.vore.top/api/IPdata?ip=${ip}`);
+    const data = await response.json();
 
-      if (data.code === 0 && data.data[ip]) {
-        const location = data.data[ip];
-        return `
-          国家: ${location.nation}, 
-          省份: ${location.province}, 
-          城市: ${location.city}, 
-          区域: ${location.subdivision_2_name}, 
-          经纬度: ${location.latitude}, ${location.longitude}
-        `;
-      } else {
-        return '无法获取地理位置';
-      }
-    } catch (error) {
-      console.error('获取地理位置信息失败:', error);
+    if (data.code === 200 && data.ipdata) {
+      const location = data.ipdata;
+      return `
+        国家: ${location.info1}, 
+        省份: ${location.info2}, 
+        城市: ${location.info3}, 
+        ISP: ${location.isp}
+      `;
+    } else {
       return '无法获取地理位置';
     }
-  };
+  } catch (error) {
+    console.error('获取地理位置信息失败:', error);
+    return '无法获取地理位置';
+  }
+};
+
+  
 
   // 定义一个递归函数，持续尝试获取 IP 地址
   const tryGetIP = () => {
