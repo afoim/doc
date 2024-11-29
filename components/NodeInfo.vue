@@ -13,26 +13,29 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 // 使用 ref 获取 DOM 元素
 const infoContainer = ref(null);
 
+const cfDomain = 'www.onani.cn'; // 自定义域名
+const vercelDomain = 'onani.cn'; // 自定义域名
+
 const displayNodeInfo = () => {
   let host = '';
   let extraHtml = '';
   const hostname = window.location.hostname;
 
-  if (hostname.includes('www.onani.cn')) {
+  if (hostname.includes(cfDomain)) {
     host = 'Cloudflare 节点';
     extraHtml = `<ul>
-      <li><a href="https://onani.vercel.app" target="_blank">前往 Vercel 节点: https://onani.vercel.app</a></li>
+      <li><a href="https://${cfDomain}" target="_blank">前往 Vercel 节点: https://${vercelDomain}</a></li>
     </ul>`;
-  } else if (hostname.includes('onani.vercel.app')) {
+  } else if (hostname.includes(vercelDomain)) {
     host = 'Vercel 节点';
     extraHtml = `<ul>
-      <li><a href="https://www.onani.cn" target="_blank">前往 Cloudflare 节点: https://www.onani.cn</a></li>
+      <li><a href="https://${vercelDomain}" target="_blank">前往 Cloudflare 节点: https://${cfDomain}</a></li>
     </ul>`;
   } else {
     host = '本地调试或反代页面';
     extraHtml = `<ul>
-      <li><a href="https://www.onani.cn" target="_blank">Cloudflare 节点</a></li>
-      <li><a href="https://onani.vercel.app" target="_blank">Vercel 节点</a></li>
+      <li><a href="https://${cfDomain}" target="_blank">Cloudflare 节点</a></li>
+      <li><a href="https://${vercelDomain}" target="_blank">Vercel 节点</a></li>
     </ul>`;
   }
 
