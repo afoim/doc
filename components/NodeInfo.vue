@@ -67,44 +67,40 @@ const loadVisitorInfo = async () => {
     const ipv6Data = await ipv6Response.json();
     const ipv6 = ipv6Data.ip;
 
-    // 使用美图 API 获取 IPv4 地理位置
-    const ipv4LocationResponse = await fetch(`https://webapi-pc.meitu.com/common/ip_location?ip=${ipv4}`);
+    // 使用 Vore API 获取 IPv4 地理位置
+    const ipv4LocationResponse = await fetch(`https://api.vore.top/api/IPdata?ip=${ipv4}`);
     const ipv4LocationData = await ipv4LocationResponse.json();
 
-    // 使用美图 API 获取 IPv6 地理位置
-    const ipv6LocationResponse = await fetch(`https://webapi-pc.meitu.com/common/ip_location?ip=${ipv6}`);
+    // 使用 Vore API 获取 IPv6 地理位置
+    const ipv6LocationResponse = await fetch(`https://api.vore.top/api/IPdata?ip=${ipv6}`);
     const ipv6LocationData = await ipv6LocationResponse.json();
 
     // 提取并显示 IPv4 地理位置信息
     let ipv4LocationHTML = '无法获取 IPv4 地理位置信息';
-    if (ipv4LocationData.code === 0 && ipv4LocationData.data[ipv4]) {
-      const ipv4Location = ipv4LocationData.data[ipv4];
+    if (ipv4LocationData.code === 200) {
+      const ipv4Location = ipv4LocationData.ipdata;
       ipv4LocationHTML = `
         <strong>IPv4 信息:</strong> 
         IPv4: ${ipv4}<br>
-        <strong>IPv4 地理位置:</strong> 
-        国家: ${ipv4Location.nation}, 
-        省: ${ipv4Location.province}, 
-        市: ${ipv4Location.city}, 
-        区域: ${ipv4Location.subdivision_2_name}, 
-        坐标: ${ipv4Location.latitude}, ${ipv4Location.longitude}, 
+        <strong>地理位置:</strong> 
+        国家: ${ipv4Location.info1}, 
+        省: ${ipv4Location.info2}, 
+        市: ${ipv4Location.info3}, 
         ISP: ${ipv4Location.isp}
       `;
     }
 
     // 提取并显示 IPv6 地理位置信息
     let ipv6LocationHTML = '无法获取 IPv6 地理位置信息';
-    if (ipv6LocationData.code === 0 && ipv6LocationData.data[ipv6]) {
-      const ipv6Location = ipv6LocationData.data[ipv6];
+    if (ipv6LocationData.code === 200) {
+      const ipv6Location = ipv6LocationData.ipdata;
       ipv6LocationHTML = `
         <strong>IPv6 信息:</strong> 
         IPv6: ${ipv6}<br>
-        <strong>IPv6 地理位置:</strong> 
-        国家: ${ipv6Location.nation}, 
-        省: ${ipv6Location.province}, 
-        市: ${ipv6Location.city}, 
-        区域: ${ipv6Location.subdivision_2_name}, 
-        坐标: ${ipv6Location.latitude}, ${ipv6Location.longitude}, 
+        <strong>地理位置:</strong> 
+        国家: ${ipv6Location.info1}, 
+        省: ${ipv6Location.info2}, 
+        市: ${ipv6Location.info3}, 
         ISP: ${ipv6Location.isp}
       `;
     }
@@ -120,9 +116,11 @@ const loadVisitorInfo = async () => {
       ipv6InfoDiv.innerHTML = ipv6LocationHTML;
       infoContainer.appendChild(ipv6InfoDiv);
     }
+
   } catch (error) {
     console.error('无法获取 IP 信息:', error);
   }
+
 
 
 
