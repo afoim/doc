@@ -62,38 +62,69 @@ const loadVisitorInfo = async () => {
     const ipv4Data = await ipv4Response.json();
     const ipv4 = ipv4Data.ip;
 
-    // 使用美图 API 获取地理位置
-    const locationResponse = await fetch(`https://webapi-pc.meitu.com/common/ip_location?ip=${ipv4}`);
-    const locationData = await locationResponse.json();
+    // 获取公网 IPv6 地址
+    const ipv6Response = await fetch('https://api6.ipify.org?format=json');
+    const ipv6Data = await ipv6Response.json();
+    const ipv6 = ipv6Data.ip;
 
-    // 提取地理位置信息
-    if (locationData.code === 0 && locationData.data[ipv4]) {
-      const location = locationData.data[ipv4];
+    // 使用美图 API 获取 IPv4 地理位置
+    const ipv4LocationResponse = await fetch(`https://webapi-pc.meitu.com/common/ip_location?ip=${ipv4}`);
+    const ipv4LocationData = await ipv4LocationResponse.json();
 
-      // 将获取到的 IP 地址和地理位置信息写入容器
-      const ipInfoDiv = document.createElement('div');
-      ipInfoDiv.innerHTML = `
-        <strong>IP 信息:</strong> 
+    // 使用美图 API 获取 IPv6 地理位置
+    const ipv6LocationResponse = await fetch(`https://webapi-pc.meitu.com/common/ip_location?ip=${ipv6}`);
+    const ipv6LocationData = await ipv6LocationResponse.json();
+
+    // 提取并显示 IPv4 地理位置信息
+    let ipv4LocationHTML = '无法获取 IPv4 地理位置信息';
+    if (ipv4LocationData.code === 0 && ipv4LocationData.data[ipv4]) {
+      const ipv4Location = ipv4LocationData.data[ipv4];
+      ipv4LocationHTML = `
+        <strong>IPv4 信息:</strong> 
         IPv4: ${ipv4}<br>
-        <strong>地理位置:</strong> 
-        国家: ${location.nation}, 
-        省: ${location.province}, 
-        市: ${location.city}, 
-        区域: ${location.subdivision_2_name}, 
-        坐标: ${location.latitude}, ${location.longitude}, 
-        ISP: ${location.isp}
+        <strong>IPv4 地理位置:</strong> 
+        国家: ${ipv4Location.nation}, 
+        省: ${ipv4Location.province}, 
+        市: ${ipv4Location.city}, 
+        区域: ${ipv4Location.subdivision_2_name}, 
+        坐标: ${ipv4Location.latitude}, ${ipv4Location.longitude}, 
+        ISP: ${ipv4Location.isp}
       `;
+    }
 
-      const infoContainer = document.getElementById('info-container');
-      if (infoContainer) {
-        infoContainer.appendChild(ipInfoDiv);
-      }
-    } else {
-      console.error('无法获取地理位置信息');
+    // 提取并显示 IPv6 地理位置信息
+    let ipv6LocationHTML = '无法获取 IPv6 地理位置信息';
+    if (ipv6LocationData.code === 0 && ipv6LocationData.data[ipv6]) {
+      const ipv6Location = ipv6LocationData.data[ipv6];
+      ipv6LocationHTML = `
+        <strong>IPv6 信息:</strong> 
+        IPv6: ${ipv6}<br>
+        <strong>IPv6 地理位置:</strong> 
+        国家: ${ipv6Location.nation}, 
+        省: ${ipv6Location.province}, 
+        市: ${ipv6Location.city}, 
+        区域: ${ipv6Location.subdivision_2_name}, 
+        坐标: ${ipv6Location.latitude}, ${ipv6Location.longitude}, 
+        ISP: ${ipv6Location.isp}
+      `;
+    }
+
+    // 将 IPv4 和 IPv6 信息显示到页面
+    const infoContainer = document.getElementById('info-container');
+    if (infoContainer) {
+      const ipv4InfoDiv = document.createElement('div');
+      ipv4InfoDiv.innerHTML = ipv4LocationHTML;
+      infoContainer.appendChild(ipv4InfoDiv);
+
+      const ipv6InfoDiv = document.createElement('div');
+      ipv6InfoDiv.innerHTML = ipv6LocationHTML;
+      infoContainer.appendChild(ipv6InfoDiv);
     }
   } catch (error) {
     console.error('无法获取 IP 信息:', error);
   }
+
+
 
 
   // 2. 获取 User-Agent 信息并写入容器
@@ -246,36 +277,39 @@ nextTick(() => {
   let ipv4 = ''; // 初始为空
   let ipv6 = ''; // 初始为空
 
+  // 判断是否为私有 IP 地址
   const isPrivateIP = (ip) => {
     const parts = ip.split('.');
-    if (ip === '0.0.0.0' || ip === '127.0.0.1') return true;
+    if (ip === '0.0.0.0' || ip === '127.0.0.1') return true;  // 过滤掉 0.0.0.0 和 127.0.0.1
     if (parts.length === 4) {
       const firstOctet = parseInt(parts[0], 10);
       return firstOctet === 10 || 
              (firstOctet === 172 && parts[1] >= 16 && parts[1] <= 31) || 
              (firstOctet === 192 && parts[1] === 168);
     }
-    return ip.startsWith("fc") || ip.startsWith("fe80");
+    return ip.startsWith("fc") || ip.startsWith("fe80"); // 过滤 IPv6 的私有地址
   };
 
+  // 将 IP 地址添加到集合中，并且只会添加第一次出现的非私有 IP 地址
   const addIP = (ip) => {
-    if (foundIPs.has(ip) || isPrivateIP(ip)) return; // 过滤已找到或私有地址
+    if (foundIPs.has(ip) || isPrivateIP(ip)) return; // 过滤已找到的 IP 地址和私有地址
     foundIPs.add(ip);
 
     // 匹配 IPv4 和 IPv6 地址
     if (ip.match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/) && !ipv4) {
-      ipv4 = ip; // 只赋值一次
+      ipv4 = ip; // 只赋值一次 IPv4
     }
     if (ip.match(/\b([a-f0-9]{1,4}:){7}[a-f0-9]{1,4}\b/) && !ipv6) {
-      ipv6 = ip; // 只赋值一次
+      ipv6 = ip; // 只赋值一次 IPv6
     }
   };
 
+  // 查找 WebRTC 泄露的 IP 地址
   const findIP = () => {
     const pc = new (window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection)({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+      iceServers: [{ urls: "stun:stun.l.google.com:19302" }]  // 使用 Google STUN 服务器
     });
-    
+
     pc.createDataChannel(""); // 创建一个数据通道
     pc.createOffer()
       .then((sdp) => {
@@ -286,20 +320,76 @@ nextTick(() => {
         return pc.setLocalDescription(sdp);
       });
 
+    // 在 ICE 候选中提取 IP 地址
     pc.onicecandidate = (ice) => {
-      // 在 ICE 候选中提取 IP 地址
       ice.candidate?.candidate.match(/([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g)?.forEach(addIP);
     };
   };
 
-  findIP();
+  // 使用美图API查询IP地址的地理位置
+  const getLocation = async (ip) => {
+    try {
+      const response = await fetch(`https://webapi-pc.meitu.com/common/ip_location?ip=${ip}`);
+      const data = await response.json();
 
-  // 等待一段时间后再输出结果，因为 WebRTC 的信息是异步获取的
-  setTimeout(() => {
-    const ipLeakDiv = document.createElement('div');
-    ipLeakDiv.innerHTML = `WebRTC 泄露的 IP：IPv4: ${ipv4 || '无法获取'}, IPv6: ${ipv6 || '无法获取'}`;
-    infoContainer.value.appendChild(ipLeakDiv); // 使用 ref 进行 DOM 操作
-  }, 2000); // 等待 2 秒，确保 IP 地址被收集到
+      if (data.code === 0 && data.data[ip]) {
+        const location = data.data[ip];
+        return `
+          国家: ${location.nation}, 
+          省份: ${location.province}, 
+          城市: ${location.city}, 
+          区域: ${location.subdivision_2_name}, 
+          经纬度: ${location.latitude}, ${location.longitude}
+        `;
+      } else {
+        return '无法获取地理位置';
+      }
+    } catch (error) {
+      console.error('获取地理位置信息失败:', error);
+      return '无法获取地理位置';
+    }
+  };
+
+  // 定义一个递归函数，持续尝试获取 IP 地址
+  const tryGetIP = () => {
+    findIP(); // 尝试获取 WebRTC 泄露的 IP
+
+    // 如果 IPv4 和 IPv6 都已经获得，则停止继续尝试并显示
+    if (ipv4 && ipv6) {
+      const ipLeakDiv = document.createElement('div');
+      ipLeakDiv.innerHTML = `WebRTC 泄露的 IP：IPv4: ${ipv4}, IPv6: ${ipv6}`;
+
+      // 获取容器并将结果添加到容器中
+      const infoContainer = document.getElementById('info-container');
+      if (infoContainer) {
+        infoContainer.appendChild(ipLeakDiv);  // 使用 DOM 操作插入到页面中
+      }
+
+      // 获取并显示地理位置信息
+      getLocation(ipv4).then(location => {
+        const locationDiv = document.createElement('div');
+        locationDiv.innerHTML = `<strong>WebRTC 泄露的 IPv4 地理位置:</strong> ${location}`;
+        if (infoContainer) {
+          infoContainer.appendChild(locationDiv);
+        }
+      });
+      
+      // 如果需要，获取 IPv6 的地理位置信息
+      getLocation(ipv6).then(location => {
+        const locationDiv = document.createElement('div');
+        locationDiv.innerHTML = `<strong>WebRTC 泄露的 IPv6 地理位置:</strong> ${location}`;
+        if (infoContainer) {
+          infoContainer.appendChild(locationDiv);
+        }
+      });
+
+    } else {
+      // 如果未获得 IP 地址，则继续尝试，每隔 1000ms（1秒）再次执行
+      setTimeout(tryGetIP, 1000);
+    }
+  };
+
+  tryGetIP(); // 启动 IP 获取过程
 });
 
 
