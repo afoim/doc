@@ -2,6 +2,8 @@
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
+
+
 hero:
   name: "AcoFork Doc"
   text: "idk"
@@ -21,5 +23,11 @@ hero:
 #     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 #   - title: Feature C
 #     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-# ---
+---
 
+<script setup>
+import NodeInfo from './components/NodeInfo.vue'; // 导入组件
+</script>
+
+
+<NodeInfo />

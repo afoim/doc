@@ -4,7 +4,10 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "AcoFork Doc",
   lang: 'zh-CN',
-  head: [ ['link', { rel: 'icon', type: 'image/x-icon', href: 'https://q2.qlogo.cn/headimg_dl?dst_uin=2973517380&spec=5' }]
+  head: [ ['link', { rel: 'icon', type: 'image/x-icon', href: 'https://q2.qlogo.cn/headimg_dl?dst_uin=2973517380&spec=5' }],
+  
+  
+  
 ],
   description: "idk",
   themeConfig: {
@@ -22,7 +25,7 @@ export default defineConfig({
     ],
 
     footer: {
-      message: '本网站内容遵循 MIT 协议。',
+      message: '本网站内容遵循 MIT 协议。<FooterInfo />',
       copyright: `版权所有 © 你活着的时候 - ${new Date().getFullYear()} AcoFork`
     },
 
