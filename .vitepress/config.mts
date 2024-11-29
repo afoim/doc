@@ -1,6 +1,11 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  vite: {
+    ssr: {
+      noExternal: ['components/NodeInfo.vue']
+    }
+  },
   title: "AcoFork Doc",
   lang: 'zh-CN',
   head: [

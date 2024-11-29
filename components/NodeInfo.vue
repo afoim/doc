@@ -1,11 +1,9 @@
 
 <template>
-  <ClientOnly>
   <div id="visitor-info">
     <!-- 显示信息的容器 -->
     <div id="info-container" ref="infoContainer"></div>
   </div>
-</ClientOnly>
 </template>
 
 <script setup>
