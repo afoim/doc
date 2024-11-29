@@ -11,7 +11,7 @@ hero:
   actions:
     - theme: brand
       text: 点我看文档
-      link: /doc/实用工具.md
+      link: /doc
     - theme: light
       text: 点我加QQ
       link: https://qm.qq.com/q/Uy9kmDXHYO
