@@ -56,41 +56,45 @@ const displayNodeInfo = () => {
 nextTick(displayNodeInfo);
 
 const loadVisitorInfo = async () => {
-  // 1. 获取真实的 IP 地址信息并写入容器
   try {
     // 获取公网 IPv4 地址
     const ipv4Response = await fetch('https://api.ipify.org?format=json');
     const ipv4Data = await ipv4Response.json();
     const ipv4 = ipv4Data.ip;
 
-    // 获取公网 IPv6 地址
-    const ipv6Response = await fetch('https://api6.ipify.org?format=json');
-    const ipv6Data = await ipv6Response.json();
-    const ipv6 = ipv6Data.ip;
-
-    // 获取地理位置信息
-    const locationResponse = await fetch(`https://ip-api.com/json/${ipv4}`);
+    // 使用美图 API 获取地理位置
+    const locationResponse = await fetch(`https://webapi-pc.meitu.com/common/ip_location?ip=${ipv4}`);
     const locationData = await locationResponse.json();
 
-    // 将获取到的 IP 地址和地理位置信息写入容器
-    if (infoContainer.value) {
+    // 提取地理位置信息
+    if (locationData.code === 0 && locationData.data[ipv4]) {
+      const location = locationData.data[ipv4];
+
+      // 将获取到的 IP 地址和地理位置信息写入容器
       const ipInfoDiv = document.createElement('div');
       ipInfoDiv.innerHTML = `
         <strong>IP 信息:</strong> 
-        IPv4: ${ipv4}, 
-        IPv6: ${ipv6}<br>
+        IPv4: ${ipv4}<br>
         <strong>地理位置:</strong> 
-        国家: ${locationData.country}, 
-        省/市: ${locationData.region}, 
-        城市: ${locationData.city}, 
-        坐标: ${locationData.lat}, ${locationData.lon}
+        国家: ${location.nation}, 
+        省: ${location.province}, 
+        市: ${location.city}, 
+        区域: ${location.subdivision_2_name}, 
+        坐标: ${location.latitude}, ${location.longitude}, 
+        ISP: ${location.isp}
       `;
-      infoContainer.value.appendChild(ipInfoDiv);
-    }
 
+      const infoContainer = document.getElementById('info-container');
+      if (infoContainer) {
+        infoContainer.appendChild(ipInfoDiv);
+      }
+    } else {
+      console.error('无法获取地理位置信息');
+    }
   } catch (error) {
     console.error('无法获取 IP 信息:', error);
   }
+
 
   // 2. 获取 User-Agent 信息并写入容器
   const userAgent = navigator.userAgent;
