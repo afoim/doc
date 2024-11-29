@@ -24,12 +24,12 @@ const displayNodeInfo = () => {
   if (hostname.includes(cfDomain)) {
     host = 'Cloudflare 节点';
     extraHtml = `<ul>
-      <li><a href="https://${cfDomain}" target="_blank">前往 Vercel 节点: https://${vercelDomain}</a></li>
+      <li><a href="https://${vercelDomain}" target="_blank">前往 Vercel 节点: https://${vercelDomain}</a></li>
     </ul>`;
   } else if (hostname.includes(vercelDomain)) {
     host = 'Vercel 节点';
     extraHtml = `<ul>
-      <li><a href="https://${vercelDomain}" target="_blank">前往 Cloudflare 节点: https://${cfDomain}</a></li>
+      <li><a href="https://${cfDomain}" target="_blank">前往 Cloudflare 节点: https://${cfDomain}</a></li>
     </ul>`;
   } else {
     host = '本地调试或反代页面';
