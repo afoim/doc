@@ -58,11 +58,11 @@ nextTick(displayNodeInfo);
 const loadVisitorInfo = async () => {
   try {
     // 获取公网 IPv4 地址
-    const ipv4Response = await fetch('https://api.ipify.org/');
+    const ipv4Response = await fetch('https://cloudflare-ip-v4.html.zone/');
     const ipv4 = await ipv4Response.text();  // 返回的 IP 地址为文本
 
     // 获取公网 IPv6 地址
-    const ipv6Response = await fetch('https://api6.ipify.org');
+    const ipv6Response = await fetch('https://cloudflare-ip-v6.html.zone/');
     const ipv6 = await ipv6Response.text();  // 返回的 IP 地址为文本
 
     // 使用 Vore API 获取 IPv4 地理位置
