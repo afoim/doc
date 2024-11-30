@@ -285,6 +285,7 @@ const loadVisitorInfo = async () => {
 };
 
 onMounted(() => {
+  displayNodeInfo();
   loadVisitorInfo();
 });
 </script>
