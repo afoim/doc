@@ -2,9 +2,9 @@
   <div id="visitor-info">
     <div v-if="loading" class="loading-container">
       <div class="loading-bar">
-        <div class="loading-progress" :style="{ width: `${loadingProgress}%` }"></div>
+        <div class="loading-progress" :style="{ width: `${loadingProgress}` }"></div>
       </div>
-      <div class="loading-text">正在加载信息... {{ loadingProgress }}%</div>
+      <div class="loading-text">{{ loadingProgress }}</div>
     </div>
     <div id="info-container" ref="infoContainer">
       <div v-for="(info, index) in visitorInfo" :key="index">
@@ -45,7 +45,7 @@ const displayNodeInfo = () => {
   }
 
   visitorInfo.value.push({ label: '当前节点', value: `${host} (${extraHtml})` });
-  visitorInfo.value.push({ label: '节点状态', value: '<a href="https://status.onani.cn" target="_blank">查看节点状态</a>' });
+  visitorInfo.value.push({ label: '节点状态', value: '<a href="https://status.onani.cn" target="_blank">查看节点状态</a><hr>' });
 };
 
 const getMoreIp = async (url, domainType) => {
@@ -249,13 +249,12 @@ const loadVisitorInfo = async () => {
     { fn: async () => {
       const memory = navigator.deviceMemory;
       const cores = navigator.hardwareConcurrency;
-      visitorInfo.value.push({ label: '设备内存', value: memory ? `${memory} GB` : '未知' });
-      visitorInfo.value.push({ label: 'CPU 核心数', value: cores ? `${cores} 核` : '未知' });
+      visitorInfo.value.push({ label: '为浏览器分配的内存', value: memory ? `${memory} GB` : '未知' });
+      visitorInfo.value.push({ label: '为浏览器分配的 CPU 核心', value: cores ? `${cores} 核` : '未知' });
     }, weight: 5 },
     { fn: async () => {
       const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
       if (connection) {
-        visitorInfo.value.push({ label: '网络类型', value: connection.type || '未知' });
         visitorInfo.value.push({ label: '网络下行速度', value: connection.downlink ? `${connection.downlink} Mbps` : '未知' });
       }
     }, weight: 5 },
@@ -274,12 +273,18 @@ const loadVisitorInfo = async () => {
 
   const totalWeight = tasks.reduce((sum, task) => sum + task.weight, 0);
   let completedWeight = 0;
+  let completedTasks = 0;
 
-  for (const task of tasks) {
-    await task.fn();
+  await Promise.all(tasks.map(async (task) => {
+    try {
+      await task.fn();
+    } catch (error) {
+      console.error('任务执行失败:', error);
+    }
     completedWeight += task.weight;
-    loadingProgress.value = Math.round((completedWeight / totalWeight) * 100);
-  }
+    completedTasks += 1;
+    loadingProgress.value = `正在加载第（${completedTasks}/${tasks.length}）项数据...`;
+  }));
 
   loading.value = false;
 };
