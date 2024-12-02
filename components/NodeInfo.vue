@@ -186,7 +186,7 @@ const loadVisitorInfo = async () => {
           }
     
           visitorInfo.value.push({ 
-            label: 'WebRTC IP', 
+            label: 'WebRTC泄露 IP', 
             value: `IPv4: ${ipv4 || '无'} (${ipv4Location}), IPv6: ${ipv6 || '无'} (${ipv6Location})` 
           });
           resolve();
