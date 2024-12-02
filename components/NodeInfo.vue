@@ -1,12 +1,5 @@
 <template>
   <div id="visitor-info">
-    <div v-if="loading" class="loading-container">
-      <div class="loading-bar">
-        <div class="loading-progress" :style="{ width: `${loadingProgress}` }"></div>
-      </div>
-      <div class="loading-text">{{ loadingProgress }}</div>
-    </div>
-    <div id="info-container" ref="infoContainer">
       <div v-for="(info, index) in visitorInfo" :key="index">
         <strong>{{ info.label }}:</strong> <span v-html="info.value"></span>
       </div>
@@ -16,12 +9,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
-
-const infoContainer = ref(null);
 const visitorInfo = ref([]);
-const loading = ref(true);
-const loadingProgress = ref(0);
 
 const cfDomain = 'www.onani.cn';
 const vercelDomains = ['onani.cn', 'doc-git-main-afoims-projects.vercel.app'];
@@ -52,11 +40,3 @@ onMounted(() => {
   displayNodeInfo();
 });
 </script>
-
-<style scoped>
-.loading-indicator {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-</style>
