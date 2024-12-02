@@ -16,6 +16,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 const infoContainer = ref(null);
 const visitorInfo = ref([]);
@@ -31,15 +32,15 @@ const displayNodeInfo = () => {
 
   if (hostname.includes(cfDomain)) {
     host = 'Cloudflare 节点';
-    extraHtml = `<a href="https://${vercelDomain}" target="_blank">前往 Vercel 节点</a>`;
-  } else if (hostname.includes(vercelDomain)) {
+    extraHtml = vercelDomains.map(domain => `<a href="https://${domain}" target="_blank">前往 Vercel 节点 (${domain})</a>`).join(', ');
+  } else if (vercelDomains.some(domain => hostname.includes(domain))) {
     host = 'Vercel 节点';
     extraHtml = `<a href="https://${cfDomain}" target="_blank">前往 Cloudflare 节点</a>`;
   } else {
     host = '本地调试或反代页面';
     extraHtml = `
       <a href="https://${cfDomain}" target="_blank">Cloudflare 节点</a>,
-      <a href="https://${vercelDomain}" target="_blank">Vercel 节点</a>
+      ${vercelDomains.map(domain => `<a href="https://${domain}" target="_blank">Vercel 节点 (${domain})</a>`).join(', ')}
     `;
   }
 
