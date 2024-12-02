@@ -11,9 +11,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import CloudflareLogo from './assets/cloudflare-logo.svg'; // 假设 Logo 存放在 ./assets 目录下
-import VercelLogo from './assets/vercel-logo.svg'; // 假设 Logo 存放在 ./assets 目录下
-
+const cfLogo = '/assets/cloudflare-logo.svg';
+const vercelLogo = '/assets/vercel-logo.svg';
 const visitorInfo = ref([]);
 
 const cfDomain = 'www.onani.cn';
@@ -25,35 +24,35 @@ const displayNodeInfo = () => {
 
   if (hostname.includes(cfDomain)) {
     host = 'Cloudflare 节点';
-    logo = CloudflareLogo;
+    logo = cfLogo;
     extraHtml = vercelDomains
       .map(
         (domain) =>
           `<a href="https://${domain}" target="_blank">
-             <img src="${VercelLogo}" alt="Vercel Logo" class="logo-small">
+             <img src="${vercelLogo}" alt="Vercel Logo" class="logo-small">
              前往 Vercel 节点 (${domain})
            </a>`
       )
       .join(', ');
   } else if (vercelDomains.some((domain) => hostname.includes(domain))) {
     host = 'Vercel 节点';
-    logo = VercelLogo;
+    logo = vercelLogo;
     extraHtml = `<a href="https://${cfDomain}" target="_blank">
-                   <img src="${CloudflareLogo}" alt="Cloudflare Logo" class="logo-small">
+                   <img src="${cfLogo}" alt="Cloudflare Logo" class="logo-small">
                    前往 Cloudflare 节点
                  </a>`;
   } else {
     host = '本地调试或反代页面';
     extraHtml = `
       <a href="https://${cfDomain}" target="_blank">
-        <img src="${CloudflareLogo}" alt="Cloudflare Logo" class="logo-small">
+        <img src="${cfLogo}" alt="Cloudflare Logo" class="logo-small">
         Cloudflare 节点
       </a>,
       ${vercelDomains
         .map(
           (domain) =>
             `<a href="https://${domain}" target="_blank">
-               <img src="${VercelLogo}" alt="Vercel Logo" class="logo-small">
+               <img src="${vercelLogo}" alt="Vercel Logo" class="logo-small">
                Vercel 节点 (${domain})
              </a>`
         )
