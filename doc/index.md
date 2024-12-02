@@ -11,6 +11,34 @@
 - Hysteria2（UDP）：`bash <(curl -fsSL https://raw.githubusercontent.com/0x0129/hysteria2/main/install.sh) -port 0721`
 - Vless+Trojan+Shadowsocks：`bash <(curl -s -L https://git.io/v2ray.sh)`
 
+## Hysteria2 服务端搭建（全平台通用）
+1. 下载 Hysteria2 可执行文件： https://github.com/apernet/hysteria/releases
+2. 创建自签名SSL/TLS证书：
+    - 创建私钥：`openssl genpkey -algorithm RSA -out hy2.key`
+    - 创建证书签名请求：`openssl req -new -key hy2.key -out hy2.csr`
+    - 创建证书：`openssl x509 -req -in mydomain.csr -signkey hy2.key -out hy2.crt -days 9999`
+3. `config.yaml`：
+```
+# listen: :443 
+
+tls:
+  cert: hy2.crt 
+  key: hy2.key 
+
+auth:
+  type: password
+  password: 0721
+
+masquerade: 
+  type: proxy
+  proxy:
+    url: https://news.ycombinator.com/ 
+    rewriteHost: true
+```
+4. 启动 Hysteria2参数：`server`
+5. V2Ray客户端连接直链：`hysteria2://0721@10.147.17.1:443?sni=bing.com&insecure=1#家里云`
+
+
 ## Cloudflare一键魔法
 
 下载 https://github.com/cmliu/edgetunnel/archive/refs/heads/main.zip 将它上传到Cloudflare Pages设置UUID。访问 https://你的域名.pages.dev/UUID
