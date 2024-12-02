@@ -15,7 +15,6 @@
 </template>
 
 <script setup>
-import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ref, onMounted } from 'vue';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
