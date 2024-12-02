@@ -6,8 +6,8 @@ layout: home
 
 hero:
   name: "AcoFork Doc"
-  text: "idk"
-  # tagline: My great project tagline
+  text: "Power Memory Run And Go FASTLY"
+  tagline: Blog已死，Doc尚存
   actions:
     - theme: brand
       text: 点我看文档
@@ -16,19 +16,11 @@ hero:
       text: 点我加QQ
       link: https://qm.qq.com/q/Uy9kmDXHYO
 
-# features:
-#   - title: Feature A
-#     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-#   - title: Feature B
-#     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-#   - title: Feature C
-#     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+ features:
+   - title: Vercel
+     details: 超快构建！超多集成！VitePress项目10s构建！
+   - title: CDN
+     details: 双重CDN保护！快速Vercel抗打Cloudfalre！怎么折都有面！
+   - title: 仅自用
+     details: 超简洁语法！极致省略的步骤！瞟一眼就大彻大悟！
 ---
-
-<script setup>
-import NodeInfo from './components/NodeInfo.vue'; // 导入组件
-</script>
-
-<ClientOnly>
-<NodeInfo />
-</ClientOnly>
