@@ -16,7 +16,7 @@
 2. 创建自签名SSL/TLS证书：
     - 创建私钥：`openssl genpkey -algorithm RSA -out hy2.key`
     - 创建证书签名请求：`openssl req -new -key hy2.key -out hy2.csr`
-    - 创建证书：`openssl x509 -req -in mydomain.csr -signkey hy2.key -out hy2.crt -days 9999`
+    - 创建证书：`openssl x509 -req -in hy2.csr -signkey hy2.key -out hy2.crt -days 9999`
 3. `config.yaml`：
 ```yaml
 # listen: :443 
