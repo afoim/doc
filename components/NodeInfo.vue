@@ -1,5 +1,6 @@
 <template>
   <div id="visitor-info">
+    <div>
       <div v-for="(info, index) in visitorInfo" :key="index">
         <strong>{{ info.label }}:</strong> <span v-html="info.value"></span>
       </div>
@@ -40,3 +41,6 @@ onMounted(() => {
   displayNodeInfo();
 });
 </script>
+
+<style scoped>
+</style>
