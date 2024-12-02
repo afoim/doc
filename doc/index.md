@@ -10,6 +10,7 @@
 ## VPS一键魔法脚本
 - Hysteria2（UDP）：`bash <(curl -fsSL https://raw.githubusercontent.com/0x0129/hysteria2/main/install.sh) -port 0721`
 - Vless+Trojan+Shadowsocks：`bash <(curl -s -L https://git.io/v2ray.sh)`
+- x-ui：`bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh)`
 
 ## Hysteria2 服务端搭建（全平台通用）
 1. 下载 Hysteria2 可执行文件： https://github.com/apernet/hysteria/releases
