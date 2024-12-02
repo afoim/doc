@@ -19,7 +19,7 @@
     - 创建证书：`openssl x509 -req -in hy2.csr -signkey hy2.key -out hy2.crt -days 9999`
 3. `config.yaml`：
 ```yaml
-# listen: :443 
+listen: :443 
 
 tls:
   cert: hy2.crt 
