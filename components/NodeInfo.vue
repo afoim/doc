@@ -16,7 +16,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 const infoContainer = ref(null);
 const visitorInfo = ref([]);
@@ -24,7 +23,7 @@ const loading = ref(true);
 const loadingProgress = ref(0);
 
 const cfDomain = 'www.onani.cn';
-const vercelDomain = 'onani.cn, doc-git-main-afoims-projects.vercel.app';
+const vercelDomains = ['onani.cn', 'doc-git-main-afoims-projects.vercel.app'];
 
 const displayNodeInfo = () => {
   const hostname = window.location.hostname;
