@@ -79,24 +79,15 @@ const loadVisitorInfo = async () => {
     // ... 其他任务保持不变
     { fn: async () => {
       const ipAddresses = await Promise.all([
-        getMoreIp('https://ipv4_ct.itdog.cn', 'ipv4_ct'),
-        getMoreIp('https://ipv6_ct.itdog.cn', 'ipv6_ct'),
-        getMoreIp('https://ipv4_cu.itdog.cn', 'ipv4_cu'),
-        getMoreIp('https://ipv6_cu.itdog.cn', 'ipv6_cu'),
         getMoreIp('https://ipv4_cm.itdog.cn', 'ipv4_cm'),
         getMoreIp('https://ipv6_cm.itdog.cn', 'ipv6_cm'),
-        getMoreIp('https://ipv4-overseas.itdog.plus', 'ipv4_overseas'),
-        getMoreIp('https://ipv6-overseas.itdog.plus', 'ipv6_overseas'),
         getMoreIp('https://ipv4.lvhai.org', 'ipv4_google'),
         getMoreIp('https://ipv6.lvhai.org', 'ipv6_google')
       ]);
 
       const ipInfo = [
-        { ips: [ipAddresses[0], ipAddresses[1]], line: '中国电信线路' },
-        { ips: [ipAddresses[2], ipAddresses[3]], line: '中国联通线路' },
-        { ips: [ipAddresses[4], ipAddresses[5]], line: '中国移动线路' },
-        { ips: [ipAddresses[6], ipAddresses[7]], line: '海外线路' },
-        { ips: [ipAddresses[8], ipAddresses[9]], line: '谷歌线路' }
+        { ips: [ipAddresses[1], ipAddresses[2]], line: '国内线路' },
+        { ips: [ipAddresses[3], ipAddresses[4]], line: '谷歌线路' },
       ];
 
       for (const { ips, line } of ipInfo) {
