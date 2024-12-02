@@ -18,7 +18,7 @@
     - 创建证书签名请求：`openssl req -new -key hy2.key -out hy2.csr`
     - 创建证书：`openssl x509 -req -in mydomain.csr -signkey hy2.key -out hy2.crt -days 9999`
 3. `config.yaml`：
-```
+```yaml
 # listen: :443 
 
 tls:
