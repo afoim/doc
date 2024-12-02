@@ -114,49 +114,11 @@ const loadVisitorInfo = async () => {
       visitorInfo.value.push({ label: 'User-Agent 信息', value: navigator.userAgent });
       visitorInfo.value.push({ label: '操作系统信息', value: navigator.platform });
     }, weight: 5 },
-    { fn: () => {
-      const updateCurrentTime = () => {
-        const currentTime = new Date().toLocaleString();
-        const timeIndex = visitorInfo.value.findIndex(info => info.label === '当前时间');
-        if (timeIndex !== -1) {
-          visitorInfo.value[timeIndex].value = currentTime;
-        } else {
-          visitorInfo.value.push({ label: '当前时间', value: currentTime });
-        }
-      };
-      updateCurrentTime();
-      setInterval(updateCurrentTime, 1000);
-    }, weight: 5 },
-    { fn: () => {
-      visitorInfo.value.push({ label: '来源页面', value: document.referrer || '无' });
-      visitorInfo.value.push({ label: '页面加载时间', value: `${performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart} ms` });
-      visitorInfo.value.push({ label: '设备类型', value: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? '移动设备' : '桌面设备' });
-    }, weight: 5 },
-    { fn: () => {
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      visitorInfo.value.push({ label: 'WebGL 支持', value: gl ? '支持' : '不支持' });
-      visitorInfo.value.push({ label: '触摸事件支持', value: 'ontouchstart' in window ? '支持' : '不支持' });
-    }, weight: 5 },
     { fn: async () => {
       const fp = await FingerprintJS.load();
       const result = await fp.get();
       visitorInfo.value.push({ label: '浏览器指纹', value: result.visitorId });
     }, weight: 10 },
-    { fn: () => {
-      visitorInfo.value.push({ label: '浏览器窗口尺寸', value: `${window.innerWidth}x${window.innerHeight}` });
-      visitorInfo.value.push({ label: '默认字体', value: window.getComputedStyle(document.body).fontFamily || '未知字体' });
-      visitorInfo.value.push({ label: '浏览器缩放比例', value: `${Math.round(window.devicePixelRatio * 100)}%` });
-      visitorInfo.value.push({ label: '全屏模式', value: document.fullscreenElement ? '是' : '否' });
-    }, weight: 5 },
-    { fn: () => {
-      visitorInfo.value.push({ label: 'JavaScript 是否启用', value: '是' });
-      visitorInfo.value.push({ label: 'Viewport 尺寸', value: `${window.innerWidth}x${window.innerHeight}` });
-      visitorInfo.value.push({ label: '浏览器语言', value: navigator.language || '未知语言' });
-      visitorInfo.value.push({ label: 'WebSocket 是否启用', value: 'WebSocket' in window ? '是' : '否' });
-      visitorInfo.value.push({ label: 'Service Worker 是否支持', value: 'serviceWorker' in navigator ? '是' : '否' });
-      visitorInfo.value.push({ label: 'LocalStorage 是否支持', value: 'localStorage' in window && window['localStorage'] !== null ? '是' : '否' });
-    }, weight: 5 },
     { fn: () => {
       return new Promise((resolve) => {
         const foundIPs = new Set();
@@ -240,35 +202,6 @@ const loadVisitorInfo = async () => {
         }, 5000);
       });
     }, weight: 10 },
-    { fn: async () => {
-      const batteryInfo = await navigator.getBattery?.() || {};
-      const batteryLevel = batteryInfo.level !== undefined ? `${Math.round(batteryInfo.level * 100)}%` : '未知';
-      const batteryCharging = batteryInfo.charging !== undefined ? (batteryInfo.charging ? '是' : '否') : '未知';
-      visitorInfo.value.push({ label: '电池信息', value: `电量: ${batteryLevel}, 是否充电: ${batteryCharging}` });
-    }, weight: 5 },
-    { fn: async () => {
-      const memory = navigator.deviceMemory;
-      const cores = navigator.hardwareConcurrency;
-      visitorInfo.value.push({ label: '为浏览器分配的内存', value: memory ? `${memory} GB` : '未知' });
-      visitorInfo.value.push({ label: '为浏览器分配的 CPU 核心', value: cores ? `${cores} 核` : '未知' });
-    }, weight: 5 },
-    { fn: async () => {
-      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-      if (connection) {
-        visitorInfo.value.push({ label: '网络下行速度', value: connection.downlink ? `${connection.downlink} Mbps` : '未知' });
-      }
-    }, weight: 5 },
-    { fn: async () => {
-      const permissions = ['geolocation', 'notifications', 'push', 'midi', 'camera', 'microphone', 'background-sync', 'persistent-storage'];
-      for (const permission of permissions) {
-        try {
-          const result = await navigator.permissions.query({ name: permission });
-          visitorInfo.value.push({ label: `${permission} 权限`, value: result.state });
-        } catch (error) {
-          console.error(`无法查询 ${permission} 权限:`, error);
-        }
-      }
-    }, weight: 10 }
   ];
 
   const totalWeight = tasks.reduce((sum, task) => sum + task.weight, 0);
