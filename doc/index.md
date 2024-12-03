@@ -1,5 +1,49 @@
 # 实用工具
 
+## Vless通用配置（不加密）
+```json
+{
+  "inbounds": [
+    {
+      "port": 1080,  // 监听端口，可以根据需要修改
+      "protocol": "vless",  // 使用 VLESS 协议
+      "settings": {
+        "clients": [
+          {
+            "id": "0721-07210721onani",  // 这里是一个 UUID，用于识别用户
+            "level": 0,  // 用户等级，设置为 0 表示普通用户
+            "email": "user@example.com"  // 用户邮箱（可选）
+          }
+        ],
+        "decryption": "none"  // 设置为 none，表示没有加密
+      },
+      "streamSettings": {
+        "network": "tcp",  // 使用 TCP 网络
+        "security": "none"  // 不使用加密，适用于 VLESS
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",  // 允许自由流量通过
+      "settings": {}
+    }
+  ],
+  "routing": {
+    "rules": []
+  }
+}
+```
+
+## AMD笔记本优化
+> 目标：关闭fTPM并且禁止系统重新安装、关闭Windows自动更新
+- 关闭fTPM： 组策略编辑器：`计算机配置 - 管理模板 - 系统 - 设备安装 - 设备安装限制 - 阻止安装与下列任何设备实例 ID 相匹配的设备` 填写：设备管理器中的**受信任的平台模块 2.0** 的`详细信息 - 设备实例路径`中的值
+- 关闭Windows自动更新：`计算机配置 - 管理模板 - Windows组件 - Windows更新`中的：
+    - 配置自动更新 - 已禁用
+    - 删除所有使用Windows更新功能的访问权限 - 已启用
+    - 不要连接任何Windows更新Internet位置 - 已启用
+    - Windows更新不包括驱动更新 - 已启用
+
 ## VPS融合怪测试脚本
 
 `bash <(curl -sL kejilion.sh)`
